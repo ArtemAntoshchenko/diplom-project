@@ -7,10 +7,10 @@ from fastapi.staticfiles import StaticFiles
 router=APIRouter(prefix='/dashboard', tags=['Дашборд'])
 
 base_dir=os.path.dirname(os.path.abspath(__file__))
-html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_page','dashboard.html')
+html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages','dashboard.html')
 
 if os.path.exists(html_path):
-    router.mount('/', StaticFiles(directory=os.path.dirname(html_path), html=True))
+    router.mount('/main', StaticFiles(directory=os.path.dirname(html_path), html=True))
 else:
     print(f'файл не найден:{html_path}')
 

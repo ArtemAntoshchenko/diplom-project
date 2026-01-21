@@ -10,4 +10,4 @@ COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ['uvicorn', 'backend/main:app', '--host', '--port 80']
+CMD ["uvicorn", "backend/main:app", "--host", "--port 80"]
