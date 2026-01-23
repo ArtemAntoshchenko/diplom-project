@@ -4,3 +4,6 @@ requests
 sqlalchemy
 alembic
 asyncpg
+python-jose
+bcrypt
+passlib[bcrypt]

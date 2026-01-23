@@ -6,12 +6,12 @@ from routers.dashboard import router as router_dashboard
 import os
 from os.path import dirname, abspath
 
-base_dir=os.path.dirname(os.path.abspath(__file__))
-html_path=os.path.join(base_dir,'..','frontEnd','public','landing','index.html')
-
 app=FastAPI()
 app.include_router(router_auth)
 app.include_router(router_dashboard)
+
+base_dir=os.path.dirname(os.path.abspath(__file__))
+html_path=os.path.join(base_dir,'..','frontEnd','public','landing','index.html')
 
 if os.path.exists(html_path):
     app.mount('/', StaticFiles(directory=os.path.dirname(html_path), html=True))
@@ -21,6 +21,4 @@ else:
 async def landing_page():
     return FileResponse(html_path)
 
-
-# https://gamma.app/ru
 

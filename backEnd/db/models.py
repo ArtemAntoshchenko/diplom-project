@@ -1,6 +1,6 @@
 from sqlalchemy import ForeignKey, Text
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from .database import Base, int_pk, str_uniq, int_null_true
+from .database import Base, int_pk, str_uniq, int_null_true, bool_False
 from datetime import date
 
 class User(Base):
@@ -9,6 +9,7 @@ class User(Base):
     id: Mapped[int_pk]
     nickname: Mapped[str_uniq]
     email: Mapped[str_uniq]
+    phone_number: Mapped[str_uniq]
     first_name: Mapped[str]
     last_name: Mapped[str]
     date_of_birth: Mapped[date]
@@ -30,8 +31,9 @@ class Habit(Base):
     id: Mapped[int_pk]
     name: Mapped[str_uniq]
     description: Mapped[str]=mapped_column(Text)
-    complit: Mapped[bool]=mapped_column(default=False)
-    complit_today: Mapped[bool]=mapped_column(default=False)
+    active:Mapped[bool_False]
+    complit: Mapped[bool_False]
+    complit_today: Mapped[bool_False]
     goal: Mapped[int_null_true]
     progress: Mapped[int_null_true]
 

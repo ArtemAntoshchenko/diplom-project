@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
 import os
 from os.path import dirname, abspath
 from fastapi.responses import FileResponse
@@ -11,7 +11,7 @@ router=APIRouter(prefix='/dashboard', tags=['Дашборд'])
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages')
 if os.path.exists(html_path):
-    router.mount('/main', StaticFiles(directory=os.path.dirname(html_path), html=True))
+    router.mount('/main', StaticFiles(directory=os.path.dirname(html_path)))
 else:
     print(f'файл не найден:{html_path}')
 
@@ -31,10 +31,6 @@ async def dashboard(request: Request):
     }
     return templates.TemplateResponse('dashboard.html', context)
 
-@router.get('/main/habist_list')
-async def dashboard():
-    context={
-        "request": request,
-        "js_url": js_path
-    }
-    return templates.TemplateResponse('dashboard.html', context)
+# @router.get('/main/habits_daily_list')
+# async def get_all_students(request_body: RBStudent = Depends()) -> list[SStudent]:
+#     return await StudentDAO.find_all(**request_body.to_dict())

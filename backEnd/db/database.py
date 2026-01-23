@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
+from contextlib import asynccontextmanager
 from sqlalchemy import func
 from core.config import get_db_url
 from datetime import datetime
@@ -7,13 +8,20 @@ from typing import Annotated
 
 DATABASE_URL=get_db_url()
 engine=create_async_engine(DATABASE_URL)
+
 async_session_maker=async_sessionmaker(engine, expire_on_commit=False)
+@asynccontextmanager
+async def get_db():
+    async with async_session_maker() as session:
+        async with session.begin():
+            yield session
 
 created_at=Annotated[datetime, mapped_column(server_default=func.now())]
 updated_at=Annotated[datetime, mapped_column(server_default=func.now(), onupdate=datetime.now)]
 int_pk=Annotated[int, mapped_column(primary_key=True)]
 str_uniq=Annotated[str, mapped_column(unique=True, nullable=False)]
-int_null_true = Annotated[int, mapped_column(nullable=True)]
+int_null_true=Annotated[int, mapped_column(nullable=True)]
+bool_False=Annotated[bool, mapped_column(default=False)]
 
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__=True
