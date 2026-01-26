@@ -19,12 +19,12 @@ js_path=os.path.join(base_dir,'..','..','frontEnd','static','js')
 templates=Jinja2Templates(directory=html_path)
 
 @router.get('/main')
-async def dashboard(request: Request):
+async def dashBoard(request: Request):
     weather_client=WeatherClient(base_url='https://api.openweathermap.org')
     weather_info=await weather_client.get_info()
     user_timezone=str(request.cookies.get('timezone', 'UTC'))
-    tz=ZoneInfo(user_timezone)
-    tomorrow=datetime.now(tz)+timedelta(days=1)
+    timezone=ZoneInfo(user_timezone)
+    tomorrow=datetime.now(timezone)+timedelta(days=1)
     tomorrow_date_str=tomorrow.date().strftime('%Y-%m-%d')
     forecasts=[]
     for forecast in weather_info['list']:
