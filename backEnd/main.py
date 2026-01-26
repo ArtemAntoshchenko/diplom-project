@@ -18,20 +18,14 @@ app.include_router(router_tracking)
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','frontEnd','public','landing','index.html')
 
-
-public_dir = os.path.join(base_dir, '..', 'frontEnd', 'public')
+public_dir = os.path.join(base_dir, '..', 'frontEnd', 'public', 'lending')
 if os.path.exists(public_dir):
     app.mount('/public', StaticFiles(directory=public_dir), name='public')
 
-static_dir = os.path.join(base_dir, '..', 'frontEnd', 'static')
+static_dir = os.path.join(base_dir, '..', 'frontEnd', 'static', 'js')
 if os.path.exists(static_dir):
     app.mount('/static', StaticFiles(directory=static_dir), name='static')
 
-
-if os.path.exists(html_path):
-    app.mount('/', StaticFiles(directory=os.path.dirname(html_path), html=True))
-else:
-    print(f'файл не найден:{html_path}')
 @app.get('/')
 async def landing_page():
     return FileResponse(html_path)

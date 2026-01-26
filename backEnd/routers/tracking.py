@@ -10,16 +10,7 @@ router=APIRouter(prefix='/tracking', tags=['Отслеживание привы�
 
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages')
-if os.path.exists(html_path):
-    router.mount('/main', StaticFiles(directory=os.path.dirname(html_path)))
-else:
-    print(f'файл не найден:{html_path}')
-
 js_path=os.path.join(base_dir,'..','..','frontEnd','static','js')
-if os.path.exists(js_path):
-    router.mount('/main', StaticFiles(directory=os.path.dirname(js_path)))
-else:
-    print(f'файл не найден:{js_path}')
 
 templates=Jinja2Templates(directory=html_path)
 

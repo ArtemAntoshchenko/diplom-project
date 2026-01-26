@@ -14,16 +14,7 @@ router=APIRouter(prefix='/dashboard', tags=['Дашборд'])
 
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages')
-if os.path.exists(html_path):
-    router.mount('/main', StaticFiles(directory=os.path.dirname(html_path)))
-else:
-    print(f'файл не найден:{html_path}')
-
 js_path=os.path.join(base_dir,'..','..','frontEnd','static','js')
-if os.path.exists(js_path):
-    router.mount('/main', StaticFiles(directory=os.path.dirname(js_path)))
-else:
-    print(f'файл не найден:{js_path}')
 
 templates=Jinja2Templates(directory=html_path)
 
@@ -36,18 +27,17 @@ async def dashboard(request: Request):
     tomorrow=datetime.now(tz)+timedelta(days=1)
     tomorrow_date_str=tomorrow.date().strftime('%Y-%m-%d')
     forecasts=[]
-    if 'list' in weather_info:
-        for forecast in weather_info['list']:
-            if 'dt_txt' in forecast:
-                forecast_date=forecast['dt_txt'].split()[0]  
-                if forecast_date==tomorrow_date_str:
-                    weather={
-                        'datetime': forecast['dt_txt'],
-                        'temperature': forecast['main']['temp'],
-                        'description': forecast['weather'][0]['description'],
-                        'icon': forecast['weather'][0]['icon']
-                    }
-                    forecasts.append(weather)
+    for forecast in weather_info['list']:
+        if 'dt_txt' in forecast:
+            forecast_date=forecast['dt_txt'].split()[0]  
+            if forecast_date==tomorrow_date_str:
+                weather={
+                    'datetime': forecast['dt_txt'],
+                    'temperature': forecast['main']['temp'],
+                    'description': forecast['weather'][0]['description'],
+                    'icon': forecast['weather'][0]['icon']
+                }
+                forecasts.append(weather)
     city_weather=forecasts[4]
     context={
         "request": request,
