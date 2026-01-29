@@ -8,7 +8,8 @@ from fastapi.templating import Jinja2Templates
 from db.database import *
 from zoneinfo import ZoneInfo
 from datetime import timedelta
-
+from DAO.dao_habits import HabitDAO
+from schemas.model_schemas.habit_schema import HabitSchema
 
 router=APIRouter(prefix='/dashboard', tags=['Дашборд'])
 
@@ -46,6 +47,12 @@ async def dashBoard(request: Request):
     }
     return templates.TemplateResponse('dashboard.html', context)
 
-# @router.get('/main/habits_daily_list')
-# async def get_all_students(request_body: RBStudent = Depends()) -> list[SStudent]:
-#     return await StudentDAO.find_all(**request_body.to_dict())
+@router.get('/main/getActiveHabits')
+async def getActiveHabits()-> list[HabitSchema]:
+    result=HabitDAO.find_all_active()
+    return [{
+        'name': habit.name,
+        'complit_today:': habit.complit_today,
+        'progress:': habit.progress,
+        'goal:': habit.goal
+    } for habit in result]

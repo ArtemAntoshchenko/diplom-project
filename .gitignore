@@ -1,1 +1,3 @@
 FastVenv/
+db/alembic
+alembic.ini

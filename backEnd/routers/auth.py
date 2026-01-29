@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from core.auth import get_password_hash
 from DAO.dao_registation import UserDAO
-from schemas.service_schemas.auth_schema import UserRegister_schema
+from schemas.service_schemas.reg_schema import UserRegisterSchema
 
 router=APIRouter(prefix='/auth', tags=['Авторизация'])
 
@@ -10,7 +10,7 @@ async def login():
     pass
 
 @router.post('/registration')
-async def register_user(user_data: UserRegister_schema) -> dict:
+async def register_user(user_data: UserRegisterSchema) -> dict:
     user = await UserDAO.find_one_or_none(email=user_data.email)
     if user:
         raise HTTPException(
