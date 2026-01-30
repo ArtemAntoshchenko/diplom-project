@@ -10,26 +10,21 @@ import os
 from os.path import dirname, abspath
 
 app=FastAPI()
+base_dir=os.path.dirname(os.path.abspath(__file__))
+html_path=os.path.join(base_dir,'..','frontEnd','public','landing','index.html')
+public_dir = os.path.join(base_dir, '..', 'frontEnd', 'public')
+static_dir = os.path.join(base_dir, '..', 'frontEnd', 'static')
+
+if os.path.exists(public_dir):
+    app.mount('/public', StaticFiles(directory=public_dir), name='public')
+
+if os.path.exists(static_dir):
+    app.mount('/static', StaticFiles(directory=static_dir), name='static')
+
 app.include_router(router_auth)
 app.include_router(router_dashboard)
 app.include_router(router_habits)
 app.include_router(router_tracking)
-
-
-base_dir=os.path.dirname(os.path.abspath(__file__))
-html_path=os.path.join(base_dir,'..','frontEnd','public','landing','index.html')
-
-public_dir = os.path.join(base_dir, '..', 'frontEnd', 'public', 'lending')
-if os.path.exists(public_dir):
-    app.mount('/public', StaticFiles(directory=public_dir), name='public')
-
-static_dir = os.path.join(base_dir, '..', 'frontEnd', 'static', 'js')
-if os.path.exists(static_dir):
-    app.mount('/static/js', StaticFiles(directory=static_dir), name='static')
-
-static_dir = os.path.join(base_dir, '..', 'frontEnd', 'static', 'css')
-if os.path.exists(static_dir):
-    app.mount('/static/css', StaticFiles(directory=static_dir), name='static')
 
 @app.get('/')
 async def landing_page():

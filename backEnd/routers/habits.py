@@ -13,14 +13,13 @@ router=APIRouter(prefix='/habits', tags=['Привычки'])
 
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages')
-js_path=os.path.join(base_dir,'..','..','frontEnd','static','js')
 templates=Jinja2Templates(directory=html_path)
 
 @router.get('/main')
 async def habits(request: Request):
     context={
         "request": request,
-        "js_url": js_path
+        "js_url": "/static/js"
     }
     return templates.TemplateResponse('habits.html', context)
 

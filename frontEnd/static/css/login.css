@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    padding: 40px;
+    transition: transform 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+/* Стили формы */
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.registration-form label {
+    display: block;
+    color: #34495e;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+.registration-form input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e6ed;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    color: #2c3e50;
+}
+
+.registration-form input:focus {
+    outline: none;
+    border-color: #3498db;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.registration-form input:hover {
+    border-color: #b8c4d4;
+}
+
+/* Специальные стили для разных типов input */
+.registration-form input[type="password"] {
+    letter-spacing: 1px;
+}
+
+.registration-form input[type="date"] {
+    cursor: pointer;
+}
+
+.registration-form input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    background: #f8f9fa;
+    transition: background 0.3s;
+}
+
+.registration-form input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    background: #e0e6ed;
+}
+
+/* Стили кнопки */
+.submit-button {
+    background: linear-gradient(to right, #3498db, #2ecc71);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+    letter-spacing: 0.5px;
+}
+
+.submit-button:hover {
+    background: linear-gradient(to right, #2980b9, #27ae60);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+}
+
+/* Стили для валидации */
+.registration-form input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: #e74c3c;
+    background: #fff5f5;
+}
+
+.registration-form input:valid:not(:focus):not(:placeholder-shown) {
+    border-color: #2ecc71;
+    background: #f5fff7;
+}
+
+/* Стили для обязательных полей */
+.registration-form input:required + label:after {
+    content: ' *';
+    color: #e74c3c;
+}

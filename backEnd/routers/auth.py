@@ -12,13 +12,11 @@ import os
 router=APIRouter(prefix='/auth', tags=['Авторизация'])
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','..','frontEnd','public','auth')
-js_path=os.path.join(base_dir,'..','..','frontEnd','static','js')
-css_path=os.path.join(base_dir,'..','..','frontEnd','static','css')
 templates=Jinja2Templates(directory=html_path)
 
 @router.get('/login')
 async def login(request: Request):
-    return templates.TemplateResponse(name='login.html', context={'request': request, "js_url": js_path, "css_url": css_path})
+    return templates.TemplateResponse(name='login.html', context={'request': request, "js_url": "/static/js", "css_url": "/static/css"})
 
 @router.post('/login')
 async def loginUser(response: Response, user_data: UserAuthSchema):
@@ -37,7 +35,7 @@ async def logoutUser(response: Response):
 
 @router.get('/registration')
 async def register(request: Request):
-    return templates.TemplateResponse(name='registration.html', context={'request': request, "js_url": js_path, "css_url": css_path,})
+    return templates.TemplateResponse(name='registration.html', context={'request': request, "js_url": "/static/js", "css_url": "/static/css"})
 
 @router.post('/registration')
 async def registerUser(user_data: UserRegisterSchema) -> dict:

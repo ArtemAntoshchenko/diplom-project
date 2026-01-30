@@ -8,6 +8,8 @@ class User(Base):
 
     id: Mapped[int_pk]
     nickname: Mapped[str_uniq]
+    login: Mapped[str_uniq]
+    password: Mapped[str]
     email: Mapped[str_uniq]
     phone_number: Mapped[str_uniq]
     first_name: Mapped[str]
@@ -15,16 +17,6 @@ class User(Base):
     city: Mapped[str]
     date_of_birth: Mapped[date]
     premium: Mapped[bool]
-    auth: Mapped['Auth']=relationship('Auth', back_populates='user', uselist=False, cascade='all, delete-orphan')
-
-class Auth(Base):
-    __tablename__ = 'auth'
-
-    id: Mapped[int_pk]
-    login: Mapped[str_uniq]
-    password: Mapped[str]
-    user_id: Mapped[int]=mapped_column(ForeignKey('users.id'))
-    user: Mapped[User]=relationship('User', back_populates='auth', uselist=False)
 
 class Habit(Base):
     __tablename__ = 'habits'

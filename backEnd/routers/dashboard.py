@@ -16,7 +16,6 @@ router=APIRouter(prefix='/dashboard', tags=['Дашборд'])
 
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages')
-js_path=os.path.join(base_dir,'..','..','frontEnd','static','js')
 
 templates=Jinja2Templates(directory=html_path)
 
@@ -43,7 +42,7 @@ async def dashBoard(request: Request, profile=Depends(getMe)):
     city_weather=forecasts[4]
     context={
         "request": request,
-        "js_url": js_path,
+        "js_url": "/static/js",
         "weather_info": city_weather,
         "profile": profile
     }
