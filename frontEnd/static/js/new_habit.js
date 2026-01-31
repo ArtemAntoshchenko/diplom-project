@@ -1,10 +1,10 @@
-async function regFunction(event) {
+async function createHabit(event) {
     event.preventDefault();
-    const form=document.getElementById('registration-form');
+    const form=document.getElementById('new_habit-form');
     const formData=new FormData(form);
     const data=Object.fromEntries(formData.entries());
     try {
-        const response=await fetch('/auth/registration', {
+        const response=await fetch('/habits/main/createNewHabit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -18,13 +18,13 @@ async function regFunction(event) {
         }
         const result=await response.json();
         if (result.message) { 
-            window.location.href='/auth/login';
+            window.location.href='/habits/main';
         } else {
             alert(result.message || 'Неизвестная ошибка');
         }
     } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка при регистрации. Пожалуйста, попробуйте снова');
+        alert('Произошла ошибка при создании привычки. Пожалуйста, попробуйте снова.');
     }
 }
 
@@ -34,7 +34,7 @@ function displayErrors(errorData) {
         if (Array.isArray(errorData.detail)) {
             message = errorData.detail.map(error=> {
                 if (error.type==='string_too_short') {
-                    return `Поле "${error.loc[1]}" должно содержать минимум ${error.ctx.min_length} символов`;
+                    return `Поле "${error.loc[1]}" должно содержать минимум ${error.ctx.min_length} символов.`;
                 }
                 return error.msg || 'Произошла ошибка';
             }).join('\n');

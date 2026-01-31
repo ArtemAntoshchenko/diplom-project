@@ -3,45 +3,26 @@
     <title>Dashboard</title>
 {% endblock %}
 
-{% block sidebar_left %}
-<div class="container">
-    <h1>Мой профиль:</h1>
-    <div class="user-profile">
-        <div class="user-info">
-            <h2>ID: {{ profile.id }}</h2>
-            <p><strong>Полное имя:</strong> {{ profile.first_name }} {{ profile.last_name }}</p>
-            <p><strong>Email:</strong> {{ profile.email }}</p>
-        </div>
-    </div>
-    <button type="submit" id="logout-button" class="submit-button" onclick="logoutFunction()">Выйти</button>
-</div>
-<nav class="sidebar_left">
-    <h1>Навигация по сайту:</h1>
-    <a href="/dashboard/main">Главная</a><br>
-    <a href="/habits/main">Список привычек</a><br>
-    <a href="/tracking/main">Отслеживание привычек</a><br>
-</nav>
+{% block styles %}
+    <link rel="stylesheet" href="{{css_url}}/dashboard.css">
 {% endblock %}
 
-{% block sidebar_right %}
-<div class="container">
-    <figure class="image is-50x50">
-        <img src="http://openweathermap.org/img/w/{{ weather_info.icon }}.png" alt="Image">
-    </figure>
-    <div class="content">
-        <p>
-            <br>
-            <span class="subtitle">{{ weather_info.temperature }}°C</span>
-            <br> {{ weather_info.description }}
-            <br> {{ weather_info.datetime }}
-        </p>
-    </div>
-</div>
-{% endblock %}
 {% block content %}
-<h1>Добрый день!</h1>
-<h2>Вот ваш список задач на сегодня:</h2>
-<p id="dailyHabitsList"></p>
-<h1>Ежедневное выполнение установленных задач - залог закрепления любой полезной привычки!</h1>
+    <main class="main-content">
+        <div class="content-container">
+            <h1>Добрый день!</h1>
+            <h2>Вот ваш список задач на сегодня:</h2>
+            <div class="habits-container" id="dailyHabitsList">
+                    <!-- Здесь будут отображаться задачи -->
+            </div>
+            <div class="motivation-text">
+                <h3>Ежедневное выполнение установленных задач - залог закрепления любой полезной привычки!</h3>
+            </div>
+        </div>
+    </main>
 {% endblock %}
+
+{% block scripts %}
 <script src="{{js_url}}/dashboard.js"></script>
+{% endblock %}
+

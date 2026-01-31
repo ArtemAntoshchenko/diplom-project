@@ -5,6 +5,7 @@ from datetime import date, datetime
 
 class UserRegisterSchema(BaseModel):
     model_config=ConfigDict(from_attributes=True)
+    nickname: str=Field(..., min_length=1, max_length=15, description="Никнейм, от 1 до 15 знаков")
     email: EmailStr=Field(..., description="Электронная почта")
     login: str=Field(..., min_length=4, max_length=15, description="Логин, от 4 до 15 знаков")
     password: str=Field(..., min_length=6, max_length=30, description="Пароль, от 6 до 30 знаков")

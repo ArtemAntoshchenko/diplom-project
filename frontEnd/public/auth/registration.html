@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация</title>
+    <title>Registration</title>
     <link rel="stylesheet" href="{{css_url}}/reg.css">
 </head>
 <body>
 <div class="container">
     <h1>Регистрация:</h1>
     <form id="registration-form" class="registration-form">
+        <label for="nickname">Никнейм:</label>
+        <input type="nickname" id="nickname" name="nickname" required>
         <label for="login">Логин:</label>
         <input type="login" id="login" name="login" required>
         <label for="password">Пароль:</label>

@@ -1,42 +1,79 @@
-async function get_habits() {
-const respons=await fetch('/habits/main/getHabits', {method:'GET', headers:{'Accept':'application/json'}})
-if (respons.ok === true){
-    const habits=await respons.json()
-    const rows=document.querySelector('#tbodyHabits')
-    habits.forEach(habit=>rows.append(row(habit)))
-}
-}
-
-async function createCar(carName,carMark,carColor,carCost) {
-    const respons=await fetch('/cars', {
-        method:'POST', 
-        headers: {'Accept':'application/json', 'Content-Type': 'application/json'}, 
-        body: JSON.stringify({name:carName, mark:carMark, color:carColor, cost:carCost})
-    }) 
-    if (respons.ok===true){
-        const car=await respons.json()
-        document.querySelector('#tbodyCars').append(row(car))
-    }
+async function get_habits(event) {
+    event.preventDefault();
+    try {
+        const response=await fetch('/habits/main/getHabits', {method:'GET', headers:{'Accept':'application/json'}})
+        if (!response.ok) {
+            alert('Произошла ошибка при обновлении привычки')
+            return; 
+        }
+        const habits=await response.json()
+        const rows=document.querySelector('#tbodyHabits')
+        habits.forEach(habit=>rows.append(row(habit)))
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка. Пожалуйста, попробуйте снова');
+            }
 }
 
-async function editCar(carId,carName,carMark,carColor,carCost) {
-    const respons=await fetch('/cars', {
-        method:'PUT',
-        headers:{'Accept':'application/json', 'Content-Type': 'application/json'},
-        body: JSON.stringify({id:carId, name:carName, mark:carMark, color:carColor, cost:carCost})
+async function get_active_habits(event) {
+    event.preventDefault();
+    try {
+        const response=await fetch('/habits/main/getActiveHabits', {method:'GET', headers:{'Accept':'application/json'}})
+        if (!response.ok) {
+            alert('Произошла ошибка при обновлении привычки')
+            return; 
+        }
+        const habits=await response.json()
+        const rows=document.querySelector('#tbodyActiveHabits')
+        habits.forEach(habit=>rows.append(row(habit)))
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка. Пожалуйста, попробуйте снова');
+            }
+}
+
+async function createHabit() {
+    window.location.href='/habits/main/createNewHabit'
+}
+
+async function editHabit(event, habit_id, habit_name) {
+    event.preventDefault();
+    try {
+        const response=await fetch('/main/updateHabit', {
+            method:'PUT',
+            headers:{'Accept':'application/json', 'Content-Type': 'application/json'},
+            body: JSON.stringify({id:habit_id, name:habit_name, description:descriptionTd, goal:goalTd})
+        })
+        if (!response.ok) {
+            alert('Произошла ошибка при обновлении привычки')
+            return; 
+        }
+        const result=await response.json();
+        document.querySelector('data-rowid'==result.id).replaceWith(row(result))
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка. Пожалуйста, попробуйте снова');
+            }
+}
+
+async function deleteHabit(event, habit_id) {
+    event.preventDefault();
+    try {
+        const response=await fetch(`/main/delete/${habit_id}`, {
+        method:'DELETE',
+        headers:{'Accept':'application/json'}
     })
-    if (respons.ok===true){
-        const car=await respons.json()
-        document.querySelector(`tr[data-rowid='${car.id}']`).replaceWith(row(car))
-    }
-    else {
-        const error=await respons.json()
-        console.log(error.message)
-    }
-}
-
-async function deleteCar(id) {
-    const respons=await fetch(`/cars/${id}`, {
+        if (!response.ok) {
+            alert('Произошла ошибка при удалении привычки')
+            return; 
+        }
+        const result=await response.json();
+        document.querySelector(nameTd=result.name).replaceWith(row(result))
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка. Пожалуйста, попробуйте снова');
+            }
+    const respons=await fetch(`/main/delete/${habit_id}`, {
         method:'DELETE',
         headers:{'Accept':'application/json'}
     })
@@ -51,7 +88,6 @@ async function deleteCar(id) {
 }
 
 
-
 function row(habit) {
     const tr=document.createElement('tr')
     tr.setAttribute('data-rowid', habit.id)
@@ -61,36 +97,27 @@ function row(habit) {
     tr.append(nameTd)
 
     const descriptionTd=document.createElement('td')
-    markTd.append(habit.description)
+    descriptionTd.append(habit.description)
     tr.append(descriptionTd)
 
     const goalTd=document.createElement('td')
-    costTd.append(habit.goal)
+    goalTd.append(habit.goal)
     tr.append(goalTd)
 
     const progressTd=document.createElement('td')
-    costTd.append(habit.progress)
+    progressTd.append(habit.progress)
     tr.append(progressTd)
-
-    const complitTd=document.createElement('td')
-    colorTd.append(habit.complit)
-    tr.append(complitTd)
 
     const linksTd=document.createElement('td')
 
-    const createLink=document.createElement('button')
-    buyLink.append('Купить автомобиль')
-    buyLink.addEventListener('click', async()=>await buyCar(car.id, car.name, car.mark, car.color, car.cost))
-    linksTd.append(createLink)
-
-    const editHabit=document.createElement('button')
-    editCar.append('Изменить автомобиль')
-    editCar.addEventListener('click', async()=>await getCar(car.id))
-    linksTd.append(editCar)
+    const editLink=document.createElement('button')
+    editLink.append('Редактировать привычку')
+    editLink.addEventListener('click', async()=>await editHabit(habit.id))
+    linksTd.append(editLink)
 
     const deleteLink=document.createElement('button')
-    deleteLink.append('Удалить автомобиль')
-    deleteLink.addEventListener('click', async()=>await deleteCar(car.id))
+    deleteLink.append('Удалить привычку')
+    deleteLink.addEventListener('click', async()=>await deleteHabit(habit.id))
     linksTd.append(deleteLink)
 
     tr.appendChild(linksTd)

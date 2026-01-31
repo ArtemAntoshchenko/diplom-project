@@ -17,13 +17,28 @@ async function loginFunction(event) {
             return; 
         }
         const result=await response.json();
-        if (result.message) { 
-            window.location.href='/dashboard/main'; 
-        } else {
-            alert(result.message || 'Неизвестная ошибка');
-        }
+        if (result.access_token) {
+            window.location.href = '/dashboard/main'; 
+        } else {alert('Ошибка аутентификации')}
     } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка при входе. Пожалуйста, попробуйте снова.');
+        alert('Произошла ошибка при входе. Пожалуйста, попробуйте снова');
     }
+}
+
+function displayErrors(errorData) {
+    let message='Произошла ошибка';
+    if (errorData && errorData.detail) {
+        if (Array.isArray(errorData.detail)) {
+            message = errorData.detail.map(error=> {
+                if (error.type==='string_too_short') {
+                    return `Поле "${error.loc[1]}" должно содержать минимум ${error.ctx.min_length} символов`;
+                }
+                return error.msg || 'Произошла ошибка';
+            }).join('\n');
+        } else {
+            message=errorData.detail || 'Произошла ошибка';
+        }
+    }
+    alert(message);
 }

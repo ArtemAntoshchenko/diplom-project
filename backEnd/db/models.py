@@ -16,7 +16,7 @@ class User(Base):
     last_name: Mapped[str]
     city: Mapped[str]
     date_of_birth: Mapped[date]
-    premium: Mapped[bool]
+    premium: Mapped[bool]=mapped_column(default=False)
 
 class Habit(Base):
     __tablename__ = 'habits'
@@ -24,10 +24,10 @@ class Habit(Base):
     id: Mapped[int_pk]
     name: Mapped[str_uniq]
     description: Mapped[str]=mapped_column(Text)
-    active:Mapped[bool_False]
     complit: Mapped[bool_False]
     complit_today: Mapped[bool_False]
     goal: Mapped[int_null_true]
     progress: Mapped[int_null_true]
+    step: Mapped[int_null_true]
 
 

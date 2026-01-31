@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, HTTPException, status
 import os
 from os.path import dirname, abspath
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from ..db.database import *
 from ..db.models import Habit
-from ..schemas.service_schemas.update_habit_schema import HabitUpdateSchema, HabitResponseSchema
+from ..schemas.service_schemas.update_habit_schema import HabitUpdateSchema, HabitUpdateResponse 
+from ..schemas.service_schemas.create_habit_schema import HabitCreateSchema
 from ..schemas.model_schemas.habit_schema import HabitSchema
 from ..DAO.dao_habits import HabitDAO
+from ..routers.auth import getUserInfo
 
 router=APIRouter(prefix='/habits', tags=['Привычки'])
 
@@ -16,10 +18,12 @@ html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages')
 templates=Jinja2Templates(directory=html_path)
 
 @router.get('/main')
-async def habits(request: Request):
+async def habits(request: Request, profile=Depends(getUserInfo)):
     context={
         "request": request,
-        "js_url": "/static/js"
+        "js_url": "/static/js",
+        "css_url": "/static/css",
+        "profile": profile
     }
     return templates.TemplateResponse('habits.html', context)
 
@@ -31,8 +35,24 @@ async def getHabits()-> list[HabitSchema]:
 async def getActiveHabits()-> list[HabitSchema]:
     return HabitDAO.find_all_active()
 
-@router.put("/main/updateHabit", response_model=HabitResponseSchema)
-async def updateHabit(habit: HabitUpdateSchema)-> HabitResponseSchema:
+@router.get('/main/createNewHabit')
+async def createNewHabit(request: Request):
+    return templates.TemplateResponse(name='new_habit.html', context={'request': request, "js_url": "/static/js", "css_url": "/static/css"})
+
+@router.post('/main/createNewHabit')
+async def createNewHabit(habit_data: HabitCreateSchema)-> dict:
+    habit=await HabitDAO.find_one_or_none(name=habit_data.name)
+    if habit:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail='Привычка с таким названием уже существует'
+        )
+    habit_dict=habit_data.model_dump()
+    await HabitDAO.add(**habit_dict)
+    return {'message': 'Вы успешно создали привычку!'}
+
+@router.put("/main/updateHabit", response_model=HabitUpdateResponse)
+async def updateHabit(habit: HabitUpdateSchema)-> HabitUpdateResponse:
     update_data = habit.model_dump(exclude_none=True)
     habit_id = update_data.pop('id')
     result=await HabitDAO.update(filter_by={'habit_id': habit_id}, **update_data)                              

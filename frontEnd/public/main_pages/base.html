@@ -6,23 +6,51 @@
     {% block title %}
       <title>BetterMe</title>
     {% endblock %}
-    <style>
-        td {padding:5px;}
-        button {margin: 5px;}
-        th {padding:5px; font-size: large;}
-    </style>
+    {% block styles %}{% endblock %}
 </head>
 <body>
-    {% block sidebar_left %}
-    <nav class="sidebar_left">
-        <h1>Навигация по сайту:</h1>
-        <a href="/dashboard/main">Главная</a><br>
-        <a href="/habits/main">Список привычек</a><br>
-        <a href="/tracking/main">Отслеживание привычек</a><br>
-    </nav>
-    {% endblock %}
-    {% block sidebar_right %}
-    {% endblock %}
-    {% block content %}{% endblock %}
+    <div class="layout">
+        {% block sidebar_left %}
+        <div class="sidebar-left">
+            <nav class="navigation">
+                <h1>Навигация по сайту:</h1>
+                <div class="nav-links">
+                    <a href="/dashboard/main">Главная</a>
+                    <a href="/habits/main">Список привычек</a>
+                    <a href="/tracking/main">Отслеживание привычек</a>
+                </div>
+            </nav>
+            <div class="user-profile">
+                <h1>Мой профиль:</h1>
+                <div class="user-info">
+                    <h2>ID: {{ profile.id }}</h2>
+                    <p><strong>Никнейм:</strong> {{ profile.nickname }}</p>
+                    <p><strong>Полное имя:</strong> {{ profile.first_name }} {{ profile.last_name }}</p>
+                    <p><strong>Email:</strong> {{ profile.email }}</p>
+                </div>
+                <button type="button" id="logout-button" class="logout-button" onclick="logoutFunction()">Выйти</button>
+            </div>
+        </div>
+        {% endblock %}
+        {% block content %}{% endblock %}
+        {% block sidebar_right %}
+        <div class="sidebar-right">
+            <div class="weather-widget">
+                <h1>Погода на завтра:</h1>
+                <div class="weather-content">
+                    <figure class="weather-icon">
+                        <img src="http://openweathermap.org/img/w/{{ weather_info.icon }}.png" alt="Погода">
+                    </figure>
+                    <div class="weather-info">
+                        <span class="temperature">{{ weather_info.temperature }}°C</span>
+                        <p class="description">{{ weather_info.description }}</p>
+                        <p class="datetime">{{ weather_info.datetime }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+{% block scripts %}{% endblock %}
 </body>
 </html>

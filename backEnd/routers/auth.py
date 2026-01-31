@@ -38,7 +38,7 @@ async def register(request: Request):
     return templates.TemplateResponse(name='registration.html', context={'request': request, "js_url": "/static/js", "css_url": "/static/css"})
 
 @router.post('/registration')
-async def registerUser(user_data: UserRegisterSchema) -> dict:
+async def registerUser(user_data: UserRegisterSchema)-> dict:
     user=await UserDAO.find_one_or_none(login=user_data.login)
     if user:
         raise HTTPException(
@@ -46,11 +46,11 @@ async def registerUser(user_data: UserRegisterSchema) -> dict:
             detail='Пользователь уже существует'
         )
     user_dict=user_data.model_dump()
-    user_dict['password'] = get_password_hash(user_data.password)
+    user_dict['password']=get_password_hash(user_data.password)
     await UserDAO.add(**user_dict)
     return {'message': 'Вы успешно зарегистрированы!'}
 
-@router.get("/me/")
-async def getMe(user_data: User=Depends(get_current_user)):
+@router.get("/user")
+async def getUserInfo(user_data: User=Depends(get_current_user)):
     return user_data
 

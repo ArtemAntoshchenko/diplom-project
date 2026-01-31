@@ -36,13 +36,13 @@ h1 {
 }
 
 /* Стили формы */
-.registration-form {
+.new_habit-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.registration-form label {
+.new_habit-form label {
     display: block;
     color: #34495e;
     font-weight: 600;
@@ -51,7 +51,7 @@ h1 {
     transition: color 0.3s;
 }
 
-.registration-form input {
+.new_habit-form input {
     width: 100%;
     padding: 14px 16px;
     border: 2px solid #e0e6ed;
@@ -60,27 +60,6 @@ h1 {
     transition: all 0.3s ease;
     background: #f8f9fa;
     color: #2c3e50;
-}
-
-/* Специальные стили для разных типов input */
-.registration-form input[type="password"] {
-    letter-spacing: 1px;
-}
-
-.registration-form input[type="date"] {
-    cursor: pointer;
-}
-
-.registration-form input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 5px;
-    background: #f8f9fa;
-    transition: background 0.3s;
-}
-
-.registration-form input[type="date"]::-webkit-calendar-picker-indicator:hover {
-    background: #e0e6ed;
 }
 
 /* Стили кнопки */
@@ -100,18 +79,18 @@ h1 {
 }
 
 /* Стили для валидации */
-.registration-form input:invalid:not(:focus):not(:placeholder-shown) {
+.new_habit-form input:invalid:not(:focus):not(:placeholder-shown) {
     border-color: #e74c3c;
     background: #fff5f5;
 }
 
-.registration-form input:valid:not(:focus):not(:placeholder-shown) {
+.new_habit-form input:valid:not(:focus):not(:placeholder-shown) {
     border-color: #2ecc71;
     background: #f5fff7;
 }
 
 /* Стили для обязательных полей */
-.registration-form input:required + label:after {
+.new_habit-form input:required {
     content: ' *';
     color: #e74c3c;
 }

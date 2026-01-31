@@ -1,7 +1,25 @@
-{% extends 'base.html' %}
-{% block title %}
-    <title>Create habit</title>
-{% endblock %}
-{% block content %}
-
-{% endblock %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Habit</title>
+    <link rel="stylesheet" href="{{css_url}}/new_habit.css">
+</head>
+<body>
+<div class="container">
+    <h1>Создание привычки:</h1>
+    <form id="new_habit-form" class="new_habit-form">
+        <label for="name">Название:</label>
+        <input type="name" id="name" name="name" required>
+        <label for="description">Описание:</label>
+        <input type="description" id="description" name="description" required>
+        <label for="goal">Цель:</label>
+        <input type="goal" id="goal" name="goal" required>
+        <label for="step">Шаг выполнения:</label>
+        <input type="step" id="step" name="step" required>
+        <button type="submit" id="create-button" class="submit-button" onclick="createHabit(event)">Создать привычку</button></form>
+</div>
+<script src="{{js_url}}/new_habit.js"></script>
+</body>
+</html>

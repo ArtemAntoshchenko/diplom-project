@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from .routers.auth import router as router_auth
 from .routers.dashboard import router as router_dashboard
@@ -11,9 +11,10 @@ from os.path import dirname, abspath
 
 app=FastAPI()
 base_dir=os.path.dirname(os.path.abspath(__file__))
-html_path=os.path.join(base_dir,'..','frontEnd','public','landing','index.html')
+html_path=os.path.join(base_dir,'..','frontEnd','public','landing')
 public_dir = os.path.join(base_dir, '..', 'frontEnd', 'public')
 static_dir = os.path.join(base_dir, '..', 'frontEnd', 'static')
+templates=Jinja2Templates(directory=html_path)
 
 if os.path.exists(public_dir):
     app.mount('/public', StaticFiles(directory=public_dir), name='public')
@@ -27,7 +28,7 @@ app.include_router(router_habits)
 app.include_router(router_tracking)
 
 @app.get('/')
-async def landing_page():
-    return FileResponse(html_path)
+async def landing_page(request: Request):
+    return templates.TemplateResponse('index.html', context={"request": request,"css_url": "/static/css"})
 
 

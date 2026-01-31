@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Depends
 import os
 from ..core.weather_api import WeatherClient
-from ..routers.auth import getMe
+from ..routers.auth import getUserInfo
 from os.path import dirname, abspath
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -20,7 +20,7 @@ html_path=os.path.join(base_dir,'..','..','frontEnd','public','main_pages')
 templates=Jinja2Templates(directory=html_path)
 
 @router.get('/main')
-async def dashBoard(request: Request, profile=Depends(getMe)):
+async def dashBoard(request: Request, profile=Depends(getUserInfo)):
     weather_client=WeatherClient(base_url='https://api.openweathermap.org')
     weather_info=await weather_client.get_info()
     user_timezone=str(request.cookies.get('timezone', 'UTC'))
@@ -43,6 +43,7 @@ async def dashBoard(request: Request, profile=Depends(getMe)):
     context={
         "request": request,
         "js_url": "/static/js",
+        "css_url": "/static/css",
         "weather_info": city_weather,
         "profile": profile
     }
@@ -53,6 +54,7 @@ async def getActiveHabits()-> list[HabitSchema]:
     result=HabitDAO.find_all_active()
     return [{
         'name': habit.name,
+        'description': habit.description,
         'complit_today:': habit.complit_today,
         'progress:': habit.progress,
         'goal:': habit.goal
