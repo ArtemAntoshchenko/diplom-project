@@ -3,14 +3,12 @@ import os
 from ..core.weather_api import WeatherClient
 from ..routers.auth import getUserInfo
 from os.path import dirname, abspath
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from ..db.database import *
 from zoneinfo import ZoneInfo
 from datetime import timedelta
 from ..DAO.dao_habits import HabitDAO
-from ..schemas.model_schemas.habit_schema import HabitSchema
+from ..core.redis import cache
 
 router=APIRouter(prefix='/dashboard', tags=['Дашборд'])
 
@@ -41,18 +39,23 @@ async def dashBoard(request: Request, profile=Depends(getUserInfo)):
                 forecasts.append(weather)
     city_weather=forecasts[4]
     context={
-        "request": request,
-        "js_url": "/static/js",
-        "css_url": "/static/css",
-        "weather_info": city_weather,
-        "profile": profile
+        'request': request,
+        'js_url': '/static/js',
+        'css_url': '/static/css',
+        'weather_info': city_weather,
+        'profile': profile
     }
     return templates.TemplateResponse('dashboard.html', context)
 
 @router.get('/main/getActiveHabits')
 async def getActiveHabits():
+    cache_key='habits:active'
+    cached=await cache.get(cache_key)
+    if cached is not None:
+        print('Информация взята из кэша')
+        return cached
     result=await HabitDAO.find_all_active()
-    return [{
+    habits_list=[{
         'id': habit.id,
         'name': habit.name,
         'description': habit.description,
@@ -60,13 +63,17 @@ async def getActiveHabits():
         'progress': habit.progress,
         'goal': habit.goal
     } for habit in result]
+    await cache.set(cache_key, habits_list, expire=300)
+    return habits_list
 
 @router.post('/main/complitActiveHabit/{habit_id}')
 async def complitActiveHabit(habit_id: int):
     await HabitDAO.complit_habit(habit_id)
+    await cache.clear_pattern('habits:*')
     return {'message': 'Привычка на сегодня выполнена'}
 
 @router.post('/main/dailyUpdate/{habit_id}')
 async def dailyHabitStatusUpdate(habit_id: int):
     await HabitDAO.daily_habit_status_update(habit_id)
+    await cache.clear_pattern('habits:*')
     return {'message': 'Прошёл день и статус привычки был обновлён'}

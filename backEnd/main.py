@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from contextlib import asynccontextmanager
+from .core.redis import cache
 from .routers.auth import router as router_auth
 from .routers.dashboard import router as router_dashboard
 from .routers.dashboard import router as router_dashboard
@@ -9,7 +11,13 @@ from .routers.tracking import router as router_tracking
 import os
 from os.path import dirname, abspath
 
-app=FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await cache.connect()
+    yield
+    await cache.close()
+
+app=FastAPI(lifespan=lifespan)
 base_dir=os.path.dirname(os.path.abspath(__file__))
 html_path=os.path.join(base_dir,'..','frontEnd','public','landing')
 public_dir = os.path.join(base_dir, '..', 'frontEnd', 'public')

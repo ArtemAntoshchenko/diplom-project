@@ -102,9 +102,10 @@ async function complitHabit(habit_id) {
     }
 }
 
-async function dailyUpdate(habit_id) {
+async function dailyUpdate(habits) {
+    for (const habit of habits)
     try {
-        const response=await fetch(`/dashboard/main/dailyUpdate/${habit_id}`, {
+        const response=await fetch(`/dashboard/main/dailyUpdate/${habit.id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -113,10 +114,8 @@ async function dailyUpdate(habit_id) {
         if (!response.ok) {
             const error=await response.json();
             alert(error.detail || 'Ошибка ежедневного обновления статуса');
-            return false;
+            continue
         }
-        const result=await response.json();
-        alert(result.message);
         window.location.reload()
         return true;
     } catch (error) {

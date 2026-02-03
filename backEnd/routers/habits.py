@@ -2,14 +2,13 @@ from fastapi import APIRouter, Request, Depends, HTTPException, status
 import os
 from os.path import dirname, abspath
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
 from ..db.database import *
-from ..db.models import Habit
 from ..schemas.service_schemas.update_habit_schema import HabitUpdateSchema, HabitUpdateResponse 
 from ..schemas.service_schemas.create_habit_schema import HabitCreateSchema
 from ..schemas.model_schemas.habit_schema import HabitSchema
 from ..DAO.dao_habits import HabitDAO
 from ..routers.auth import getUserInfo
+from ..core.redis import cache
 
 router=APIRouter(prefix='/habits', tags=['Привычки'])
 
@@ -29,12 +28,22 @@ async def habits(request: Request, profile=Depends(getUserInfo)):
 
 @router.get('/main/getHabits')
 async def getHabits()-> list[HabitSchema]:
+    cache_key=f'habits:all:{datetime.now().date()}'
+    cached=await cache.get(cache_key)
+    if cached is not None:
+        return cached
     habits=await HabitDAO.find_all()
+    await cache.set(cache_key, habits, expire=60)
     return habits
 
 @router.get('/main/getActiveHabits')
 async def getActiveHabits()-> list[HabitSchema]:
+    cache_key=f'habits:active:{datetime.now().date()}'
+    cached=await cache.get(cache_key)
+    if cached is not None:
+        return cached
     habits_active=await HabitDAO.find_all_active()
+    await cache.set(cache_key, habits_active, expire=60)
     return habits_active
 
 @router.get('/main/createNewHabit')
@@ -51,18 +60,21 @@ async def createNewHabit(habit_data: HabitCreateSchema)-> dict:
         )
     habit_dict=habit_data.model_dump()
     await HabitDAO.add(**habit_dict)
+    await cache.clear_pattern('habits:*')
     return {'message': 'Вы успешно создали привычку!'}
 
 @router.put("/main/updateHabit", response_model=HabitUpdateResponse)
 async def updateHabit(habit: HabitUpdateSchema)-> HabitUpdateResponse:
     update_data = habit.model_dump(exclude_none=True)
     habit_id = update_data.pop('id')
-    result=await HabitDAO.update(filter_by={'id': habit_id}, **update_data)                              
+    result=await HabitDAO.update(filter_by={'id': habit_id}, **update_data)
+    await cache.clear_pattern('habits:*')                             
     return result
 
 @router.delete("/main/delete/{habit_id}")
 async def deleteHabit(habit_id: int)-> dict:
     result=await HabitDAO.delete(id=habit_id)
+    await cache.clear_pattern('habits:*') 
     if result:
         return {"message": f"Привычка с ID {habit_id} удалена!"}
     else:
