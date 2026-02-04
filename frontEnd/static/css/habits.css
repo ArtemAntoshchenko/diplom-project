@@ -5,7 +5,6 @@
 }
 
 :root {
-    /* Цветовая палитра в вашем стиле */
     --bg-gradient: linear-gradient(135deg, #0a192f 0%, #1a1a2e 50%, #16213e 100%);
     --card-bg: rgba(17, 34, 64, 0.7);
     --border-color: rgba(100, 255, 218, 0.1);
@@ -17,18 +16,15 @@
     --warning-color: #ffd166;
     --danger-color: #ef476f;
     
-    /* Отступы на основе вашего дизайна */
     --spacing-sm: 10px;
     --spacing-md: 20px;
     --spacing-lg: 30px;
     --spacing-xl: 40px;
     
-    /* Скругления */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     
-    /* Эффекты */
     --blur: blur(10px);
     --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -42,7 +38,6 @@ body {
     line-height: 1.6;
 }
 
-/* Фоновый эффект */
 body::before {
     content: '';
     position: fixed;
@@ -57,7 +52,6 @@ body::before {
     pointer-events: none;
 }
 
-/* ===== ОСНОВНОЙ КОНТЕЙНЕР С ЛЕЙАУТОМ ===== */
 .layout {
     display: flex;
     min-height: 100vh;
@@ -73,7 +67,6 @@ body::before {
     align-items: flex-start; 
 }
 
-/* ===== ЛЕВАЯ БОКОВАЯ ПАНЕЛЬ ===== */
 .sidebar-left {
     width: 320px;
     flex-shrink: 0;
@@ -85,7 +78,6 @@ body::before {
     height: fit-content;
 }
 
-/* Навигация */
 .navigation {
     background: var(--card-bg);
     backdrop-filter: var(--blur);
@@ -123,7 +115,7 @@ body::before {
     transition: var(--transition);
 }
 
-/* Профиль пользователя */
+
 .user-profile {
     background: var(--card-bg);
     backdrop-filter: var(--blur);
@@ -176,7 +168,7 @@ body::before {
     margin-right: 8px;
 }
 
-/* Кнопка выхода */
+
 .logout-button {
     background: linear-gradient(to right, 
         rgba(52, 152, 219, 0.8), 
@@ -201,7 +193,7 @@ body::before {
     transform: translateY(0);
 }
 
-/* ===== ПРАВЫЙ КОНТЕНТ - КОНТЕЙНЕР С ТАБЛИЦАМИ И КНОПКОЙ ===== */
+
 .layout > :not(.sidebar-left) {
     flex: 1;
     background: var(--card-bg);
@@ -213,27 +205,24 @@ body::before {
     min-height: auto;
     height: auto;
     display: flex;
-    flex-direction: column; /* Вертикальное расположение элементов */
+    flex-direction: column; 
 }
 
-/* ===== КОНТЕЙНЕР ДЛЯ ВСЕХ ТАБЛИЦ ===== */
 .habits-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xl); /* Расстояние между секциями */
-    flex: 1; /* Занимает всё доступное пространство */
+    gap: var(--spacing-xl);
+    flex: 1; 
 }
 
-/* ===== СЕКЦИЯ С ТАБЛИЦЕЙ ===== */
 .habit-section {
-    margin-bottom: 0; /* Убираем внешние отступы */
+    margin-bottom: 0; 
 }
 
 .habit-section:last-of-type {
     margin-bottom: 0;
 }
 
-/* ===== ЗАГОЛОВКИ ВНУТРИ СЕКЦИЙ ===== */
 .habit-section h2 {
     font-size: 1.8rem;
     color: var(--primary-color);
@@ -254,7 +243,6 @@ body::before {
     background: var(--primary-color);
 }
 
-/* ===== ТАБЛИЦЫ ПРИВЫЧЕК ===== */
 .habit-section table {
     width: 100%;
     border-collapse: separate;
@@ -306,20 +294,17 @@ tbody td {
     font-size: 1rem;
 }
 
-/* Выравнивание текста в ячейках */
-tbody td:nth-child(1), /* Название */
-tbody td:nth-child(2), /* Описание */
-tbody td:nth-child(3) { /* Цель */
+tbody td:nth-child(1), 
+tbody td:nth-child(2), 
+tbody td:nth-child(3) { 
     text-align: left;
 }
 
-/* Ячейки прогресса и статуса */
-tbody td:nth-child(4), /* Прогресс */
-tbody td:nth-child(5) { /* Статус */
+tbody td:nth-child(4),
+tbody td:nth-child(5) { 
     text-align: center;
 }
 
-/* ===== КОНТЕЙНЕР ДЛЯ КНОПКИ ===== */
 .button-container {
     text-align: center;
     padding-top: var(--spacing-xl);
@@ -327,7 +312,6 @@ tbody td:nth-child(5) { /* Статус */
     border-top: 1px solid rgba(100, 255, 218, 0.1);
 }
 
-/* ===== КНОПКА СОЗДАНИЯ ПРИВЫЧКИ ===== */
 #create-button.create-button {
     display: inline-block;
     margin: 0;
@@ -378,7 +362,6 @@ tbody td:nth-child(5) { /* Статус */
 }
 
 
-/* ===== СТАТУС ПРИВЫЧЕК ===== */
 .status-completed {
     color: var(--success-color);
     font-weight: 600;
@@ -419,30 +402,7 @@ tbody td:nth-child(5) { /* Статус */
     font-size: 0.9rem;
 }
 
-.status-pending::before {
-    content: "⏳";
-    font-size: 0.9rem;
-    filter: drop-shadow(0 0 2px rgba(255, 209, 102, 0.5));
-}
 
-/* ===== ПУСТЫЕ СОСТОЯНИЯ ТАБЛИЦ ===== */
-#tbodyHabits:empty::after,
-#tbodyActiveHabits:empty::after {
-    content: "📋 Привычек пока нет";
-    display: block;
-    text-align: center;
-    padding: var(--spacing-xl);
-    color: var(--text-secondary);
-    font-style: italic;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: var(--radius-md);
-    margin: var(--spacing-md) 0;
-    font-family: 'Courier New', monospace;
-    font-size: 1.1rem;
-    border: 2px dashed rgba(100, 255, 218, 0.3);
-}
-
-/* ===== ДОПОЛНИТЕЛЬНЫЕ ЭЛЕМЕНТЫ ===== */
 .habit-name {
     color: var(--primary-color);
     font-weight: 600;
@@ -465,7 +425,6 @@ tbody td:nth-child(5) { /* Статус */
     margin-top: var(--spacing-xl);
 }
 
-/* ===== КНОПКИ ДЕЙСТВИЙ В ТАБЛИЦЕ ===== */
 .edit-btn, .delete-btn {
     border: none;
     padding: 8px 16px;
@@ -508,7 +467,6 @@ tbody td:nth-child(5) { /* Статус */
     font-size: 0.9rem;
 }
 
-/* Контейнер для кнопок действий */
 tbody td:last-child {
     display: flex;
     gap: 8px;
@@ -517,7 +475,6 @@ tbody td:last-child {
     min-width: 220px;
 }
 
-/* ===== ЧЕКБОКС ДЛЯ СТАТУСА ===== */
 input[type="checkbox"] {
     appearance: none;
     width: 24px;
@@ -547,7 +504,6 @@ input[type="checkbox"]:checked::after {
 }
 
 
-/* ===== СТИЛИ ДЛЯ ФОРМ РЕДАКТИРОВАНИЯ ===== */
 .prompt-overlay {
     position: fixed;
     top: 0;
@@ -572,7 +528,6 @@ input[type="checkbox"]:checked::after {
     width: 90%;
 }
 
-/* ===== СТИЛИ ДЛЯ УВЕДОМЛЕНИЙ ===== */
 .notification {
     position: fixed;
     top: 20px;
@@ -594,7 +549,6 @@ input[type="checkbox"]:checked::after {
     border-left: 4px solid var(--danger-color);
 }
 
-/* ===== СТИЛИ ДЛЯ ПРОГРЕССА В ТЕКСТЕ ===== */
 .progress-percentage {
     font-size: 0.8rem;
     color: var(--text-secondary);
@@ -602,7 +556,6 @@ input[type="checkbox"]:checked::after {
     text-align: center;
 }
 
-/* ===== СТИЛИ ДЛЯ АКТИВНЫХ ПРИВЫЧЕК ===== */
 .today-status {
     display: flex;
     align-items: center;

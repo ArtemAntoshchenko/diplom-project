@@ -8,7 +8,6 @@ async function getDailyListHabits() {
         const habits=await response.json();
         const listContainer=document.querySelector('#dailyHabitsList');
         listContainer.innerHTML='';
-        await dailyUpdate(habits);
         habits.forEach(habit=> {
             const habitItem=createHabitItem(habit);
             listContainer.appendChild(habitItem);

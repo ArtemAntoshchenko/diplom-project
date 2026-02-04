@@ -35,7 +35,6 @@ h1 {
     padding-bottom: 15px;
 }
 
-/* Стили формы */
 .registration-form {
     display: flex;
     flex-direction: column;
@@ -62,7 +61,6 @@ h1 {
     color: #2c3e50;
 }
 
-/* Специальные стили для разных типов input */
 .registration-form input[type="password"] {
     letter-spacing: 1px;
 }
@@ -83,7 +81,6 @@ h1 {
     background: #e0e6ed;
 }
 
-/* Стили кнопки */
 .submit-button {
     background: linear-gradient(to right, #3498db, #2ecc71, yellow);
     color: white;
@@ -99,7 +96,6 @@ h1 {
     letter-spacing: 0.5px;
 }
 
-/* Стили для валидации */
 .registration-form input:invalid:not(:focus):not(:placeholder-shown) {
     border-color: #e74c3c;
     background: #fff5f5;
@@ -110,7 +106,6 @@ h1 {
     background: #f5fff7;
 }
 
-/* Стили для обязательных полей */
 .registration-form input:required + label:after {
     content: ' *';
     color: #e74c3c;

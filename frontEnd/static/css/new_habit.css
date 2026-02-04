@@ -35,7 +35,6 @@ h1 {
     padding-bottom: 15px;
 }
 
-/* Стили формы */
 .new_habit-form {
     display: flex;
     flex-direction: column;
@@ -62,7 +61,6 @@ h1 {
     color: #2c3e50;
 }
 
-/* Стили кнопки */
 .submit-button {
     background: linear-gradient(to right, #3498db, #2ecc71, yellow);
     color: white;
@@ -78,7 +76,6 @@ h1 {
     letter-spacing: 0.5px;
 }
 
-/* Стили для валидации */
 .new_habit-form input:invalid:not(:focus):not(:placeholder-shown) {
     border-color: #e74c3c;
     background: #fff5f5;
@@ -89,7 +86,6 @@ h1 {
     background: #f5fff7;
 }
 
-/* Стили для обязательных полей */
 .new_habit-form input:required {
     content: ' *';
     color: #e74c3c;
